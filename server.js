@@ -38,7 +38,7 @@ connection.on('error', (err) => {
 //User endpoints
 app.post('/signup', signup);
 app.post('/login', login);
-app.get('/user', authToken, getAuthenticatedUser);
+app.get('/user/:id', authToken, getAuthenticatedUser);
 
 //Shop endpoints
 app.post('/shop', authToken, addShopDetails);

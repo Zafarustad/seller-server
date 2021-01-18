@@ -1,38 +1,43 @@
 const mongoose = require('mongoose');
 
 const ShopSchema = new mongoose.Schema({
-  shopName: {
-    type: String,
-    required: true,
-  },
-  ShopDescription: {
-    type: String,
-  },
-  shopCategory: {
-    type: String,
-  },
-  shopInventory: {
-    type: Array,
-  },
-  shopAddress: {
-    type: String,
-    required: true,
-  },
-  shopPincode: {
-    type: Number,
-    required: true,
-  },
   shopOwnerId: {
     type: String,
     required: true,
   },
-  shopReviews: {
-    type: Array,
+  shopName: {
+    type: String,
+    required: true,
   },
-  Gstin: {
+  category: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  pincode: {
+    type: Number,
+    required: true,
+  },
+  gstin: {
     type: Number,
     required: true,
     unique: true,
+  },
+  description: {
+    type: String,
+  },
+  inventory: {
+    type: Array,
+  },
+  shopReviews: {
+    type: Array,
   },
   // shopMenuImage: {
   // type: String,

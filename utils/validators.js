@@ -29,6 +29,13 @@ exports.signupValidator = (data) => {
   if (isEmpty(data.shopOwnerName)) {
     errors.shopOwnerName = 'Must not be empty';
   }
+  if (isEmpty(data.number)) {
+    errors.number = 'Must not be empty';
+  }
+  if (data.number.length < 10) {
+    errors.number = 'Must be a valid phone number';
+  }
+
   return {
     errors,
     valid: Object.keys(errors).length === 0 ? true : false,
@@ -45,6 +52,41 @@ exports.loginValidator = (data) => {
   }
   if (isEmpty(data.password)) {
     errors.password = 'Must not be empty';
+  }
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  };
+};
+
+exports.shopDetailsValidator = (data) => {
+  const errors = {};
+  if (isEmpty(data.shopOwnerId)) {
+    errors.shopOwnerId = 'Shop owner id not found';
+  }
+  if (isEmpty(data.shopName)) {
+    errors.shopName = 'Must not be empty';
+  }
+  if (isEmpty(data.category)) {
+    errors.category = 'Must not be empty';
+  }
+  if (isEmpty(data.address)) {
+    errors.address = 'Must not be empty';
+  }
+  if (isEmpty(data.city)) {
+    errors.city = 'Must not be empty';
+  }
+  if (isEmpty(data.pincode)) {
+    errors.pincode = 'Must not be empty';
+  }
+  if (isEmpty(data.gstin)) {
+    errors.gstin = 'Must not be empty';
+  }
+  if (data.gstin.length < 15) {
+    errors.gstin = 'Please enter a valid GSTIN';
+  }
+  if (data.pincode.length < 6) {
+    errors.pincode = 'Please enter a valid area pincode';
   }
   return {
     errors,

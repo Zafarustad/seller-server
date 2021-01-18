@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { shopDetailsValidator } = require('../utils/validators');
 
 const Shop = mongoose.model('Shops');
 
@@ -6,22 +7,27 @@ exports.addShopDetails = (req, res) => {
   const {
     shopOwnerId,
     shopName,
-    ShopDescription,
-    shopCategory,
-    shopInventory,
-    shopAddress,
-    shopPincode,
+    category,
+    address,
+    city,
+    pincode,
+    gstin,
   } = req.body;
 
   const newShop = {
     shopOwnerId,
     shopName,
-    ShopDescription,
-    shopCategory,
-    shopInventory,
-    shopAddress,
-    shopPincode,
+    category,
+    address,
+    city,
+    pincode,
+    gstin,
   };
+
+  const { valid, errors } = shopDetailsValidator(newShop);
+  if (!valid) {
+    return res.status(400).send(errors);
+  }
 
   const shop = new Shop(newShop);
 
