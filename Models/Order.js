@@ -1,26 +1,31 @@
 const mongoose = require('mongoose');
 
-const OrderSchema = new mongoose.Schema({
-  productName: {
-    type: String,
-    required: true,
+const OrderSchema = new mongoose.Schema(
+  {
+    items: {
+      type: Array,
+      required: true,
+    },
+    active: {
+      type: Boolean,
+      required: true,
+    },
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    customerDetails: {
+      type: Object,
+      required: true,
+    },
+    shopId: {
+      type: String,
+      required: true,
+    },
   },
-  quantity: {
-    type: Number,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  CustomerDetails: {
-    type: Object,
-    required: true,
-  },
-  orderFromShop: {
-    type: Object,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 mongoose.model('Orders', OrderSchema);

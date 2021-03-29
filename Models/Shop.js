@@ -26,7 +26,7 @@ const ShopSchema = new mongoose.Schema({
     required: true,
   },
   gstin: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },
@@ -38,6 +38,9 @@ const ShopSchema = new mongoose.Schema({
   },
   shopReviews: {
     type: Array,
+  },
+  shopCoordinate: {
+    type: Object,
   },
   // shopMenuImage: {
   // type: String,

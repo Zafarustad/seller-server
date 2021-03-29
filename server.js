@@ -1,11 +1,24 @@
 require('./Models/User');
 require('./Models/Shop');
+require('./Models/Order');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { signup, login, getAuthenticatedUser } = require('./Routes/AuthRoutes');
-const { addShopDetails } = require('./Routes/ShopRoutes');
+const {
+  addShopDetails,
+  addShopCoordinates,
+  getShopDetails,
+  addToInventory,
+  deleteInventoryProduct,
+} = require('./Routes/ShopRoutes');
+const {
+  addNewOrder,
+  getCompletedShopOrders,
+  getPendingShopOrders,
+  markOrderComplete,
+} = require('./Routes/OrderRoutes');
 const { authToken } = require('./utils/AuthToken');
 
 const app = express();
@@ -35,14 +48,34 @@ connection.on('error', (err) => {
   console.log(`MongoDB error: ${err}`);
 });
 
-//User endpoints
-app.post('/signup', signup);
-app.post('/login', login);
-app.get('/user/:id', authToken, getAuthenticatedUser);
+app.get('/aws-test', (req, res) => {
+  res.status(200).send('aws-test hello-world');
+});
+
+//seller auth endpoints
+app.post('/seller/signup', signup);
+app.post('/seller/login', login);
+app.get('/seller/user/:id', authToken, getAuthenticatedUser);
 
 //Shop endpoints
-app.post('/shop', authToken, addShopDetails);
+app.post('/seller/shop', authToken, addShopDetails);
+app.post('/seller/shop/coordinate', authToken, addShopCoordinates);
+app.get('/seller/shop/:shopId', authToken, getShopDetails);
+app.post('/seller/shop/product', authToken, addToInventory);
+app.delete(
+  '/seller/shop/:shopId/product/:productId',
+  authToken,
+  deleteInventoryProduct
+);
 
-app.listen(port, () => {
-  console.log(`server is listening to port: ${port}`);
-});
+//Order endpoints
+app.post('/seller/order', authToken, addNewOrder);
+app.get('/seller/order/pending/:shopId', authToken, getPendingShopOrders);
+app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
+app.put('/seller/order/:orderId', authToken, markOrderComplete);
+
+// app.listen(port, () => {
+//   console.log(`server is listening to port: ${port}`);
+// });
+
+module.exports = app;

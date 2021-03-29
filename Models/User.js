@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -18,7 +18,11 @@ const UserSchema = new mongoose.Schema({
   },
   mobileNumber: {
     type: Number,
+    unique: true,
     required: true,
+  },
+  detailsCompleted: {
+    type: Number,
   },
 });
 

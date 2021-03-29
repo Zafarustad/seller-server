@@ -29,11 +29,11 @@ exports.signupValidator = (data) => {
   if (isEmpty(data.shopOwnerName)) {
     errors.shopOwnerName = 'Must not be empty';
   }
-  if (isEmpty(data.number)) {
-    errors.number = 'Must not be empty';
+  if (isEmpty(data.mobileNumber)) {
+    errors.mobileNumber = 'Must not be empty';
   }
-  if (data.number.length < 10) {
-    errors.number = 'Must be a valid phone number';
+  if (data.mobileNumber.length < 10) {
+    errors.mobileNumber = 'Must be a valid phone number';
   }
 
   return {
