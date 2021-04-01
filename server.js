@@ -74,4 +74,6 @@ app.get('/seller/order/pending/:shopId', authToken, getPendingShopOrders);
 app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/:orderId', authToken, markOrderComplete);
 
-module.exports = app;
+app.listen(port, () => {
+  console.log(`server is listening to port: ${port}`);
+});
