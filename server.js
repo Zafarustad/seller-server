@@ -29,12 +29,12 @@ app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
 
-mongoose.connect(process.env.ATLAS_URI, {
+mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
-  bufferCommands: false,
+  // bufferCommands: false,
   bufferMaxEntries: 0,
 });
 
@@ -73,9 +73,5 @@ app.post('/seller/order', authToken, addNewOrder);
 app.get('/seller/order/pending/:shopId', authToken, getPendingShopOrders);
 app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/:orderId', authToken, markOrderComplete);
-
-// app.listen(port, () => {
-//   console.log(`server is listening to port: ${port}`);
-// });
 
 module.exports = app;
