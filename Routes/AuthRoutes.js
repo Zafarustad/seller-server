@@ -127,7 +127,7 @@ exports.getAuthenticatedUser = (req, res) => {
       if (!doc) {
         return res.status(400).send({ general: 'User not found' });
       }
-      res.status(200).send(doc);
+       return res.status(200).send(doc);
     })
     .catch((err) => {
       res.status(500).send({ error: `internal server error: ${err}` });
