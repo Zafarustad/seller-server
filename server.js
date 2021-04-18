@@ -12,6 +12,7 @@ const {
   getShopDetails,
   addToInventory,
   deleteInventoryProduct,
+  getShopInventory
 } = require('./Routes/ShopRoutes');
 const {
   addNewOrder,
@@ -62,6 +63,7 @@ app.post('/seller/shop', authToken, addShopDetails);
 app.post('/seller/shop/coordinate', authToken, addShopCoordinates);
 app.get('/seller/shop/:shopId', authToken, getShopDetails);
 app.post('/seller/shop/product', authToken, addToInventory);
+app.get('/seller/inventory/:shopId', authToken, getShopInventory)
 app.delete(
   '/seller/shop/:shopId/product/:productId',
   authToken,

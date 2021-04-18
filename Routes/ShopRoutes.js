@@ -125,6 +125,7 @@ exports.addToInventory = (req, res) => {
     price,
     _id: new mongoose.Types.ObjectId(),
     inStock: true,
+    createdAt: new Date(),
   };
 
   Shop.findOneAndUpdate(
@@ -151,6 +152,19 @@ exports.deleteInventoryProduct = async (req, res) => {
       }
     );
     return res.status(200).send({ general: 'Product Deleted Successfully!' });
+  } catch (err) {
+    res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
+exports.getShopInventory = async (req, res) => {
+  try {
+    const doc = await Shop.find({ _id: req.params.shopId }).sort({
+      createdAt: 1,
+    });
+    if (doc) {
+      return res.status(200).send(doc[0].inventory);
+    }
   } catch (err) {
     res.status(500).send({ error: `internal server error: ${err}` });
   }
