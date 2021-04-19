@@ -1,32 +1,37 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true,
+const SellerSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+    shopOwnerName: {
+      type: String,
+      required: true,
+    },
+    mobileNumber: {
+      type: Number,
+      unique: true,
+      required: true,
+    },
+    detailsCompleted: {
+      type: Number,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6,
-  },
-  shopOwnerName: {
-    type: String,
-    required: true,
-  },
-  mobileNumber: {
-    type: Number,
-    unique: true,
-    required: true,
-  },
-  detailsCompleted: {
-    type: Number,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
-UserSchema.pre('save', function (next) {
+SellerSchema.pre('save', function (next) {
   const user = this;
   if (!user.isModified('password')) return next();
 
@@ -42,7 +47,7 @@ UserSchema.pre('save', function (next) {
   });
 });
 
-UserSchema.methods.comparePassword = function (canditatePassword) {
+SellerSchema.methods.comparePassword = function (canditatePassword) {
   const user = this;
   let match;
   bcrypt.compare(canditatePassword, user.password).then((result) => {
@@ -51,9 +56,9 @@ UserSchema.methods.comparePassword = function (canditatePassword) {
   return match;
 };
 
-mongoose.model('Users', UserSchema);
+mongoose.model('Sellers', SellerSchema);
 
-// UserSchema.methods.comparePassword = function (canditatePassword) {
+// SellerSchema.methods.comparePassword = function (canditatePassword) {
 //   return new Promise(async (resolve, reject) => {
 //     bcrypt.compare(canditatePassword, this.password, (err, isMatch) => {
 //       if (err) {

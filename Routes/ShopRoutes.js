@@ -1,9 +1,7 @@
-const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
-const { shopDetailsValidator } = require('../utils/validators');
 
 const Shop = mongoose.model('Shops');
-const User = mongoose.model('Users');
+const Seller = mongoose.model('Sellers');
 
 exports.addShopDetails = (req, res) => {
   const {
@@ -26,17 +24,12 @@ exports.addShopDetails = (req, res) => {
     gstin,
   };
 
-  const { valid, errors } = shopDetailsValidator(newShop);
-  if (!valid) {
-    return res.status(400).send(errors);
-  }
-
   const shop = new Shop(newShop);
 
   shop
     .save()
     .then((shopDoc) => {
-      User.findOneAndUpdate(
+      Seller.findOneAndUpdate(
         { _id: shopOwnerId },
         { $set: { detailsCompleted: 1 } },
         { returnOriginal: false, projection: { password: 0, __v: 0 } }
@@ -75,7 +68,7 @@ exports.addShopCoordinates = (req, res) => {
     { returnOriginal: false, projection: { __v: 0 } }
   )
     .then((shopDoc) => {
-      User.findOneAndUpdate(
+      Seller.findOneAndUpdate(
         { _id: shopOwnerId },
         { $set: { detailsCompleted: 2 } },
         { returnOriginal: false, projection: { password: 0, __v: 0 } }

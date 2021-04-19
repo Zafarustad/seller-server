@@ -1,4 +1,4 @@
-require('./Models/User');
+require('./Models/Seller');
 require('./Models/Shop');
 require('./Models/Order');
 require('dotenv').config();
