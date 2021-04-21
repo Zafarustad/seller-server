@@ -26,11 +26,6 @@ const ShopSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    gstin: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     description: {
       type: String,
     },

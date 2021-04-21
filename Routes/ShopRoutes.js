@@ -11,7 +11,6 @@ exports.addShopDetails = (req, res) => {
     address,
     city,
     pincode,
-    gstin,
   } = req.body;
 
   const newShop = {
@@ -21,7 +20,6 @@ exports.addShopDetails = (req, res) => {
     address,
     city,
     pincode,
-    gstin,
   };
 
   const shop = new Shop(newShop);
