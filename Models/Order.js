@@ -10,6 +10,10 @@ const OrderSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    cancelled: {
+      type: Boolean,
+      required: true,
+    },
     totalAmount: {
       type: Number,
       required: true,

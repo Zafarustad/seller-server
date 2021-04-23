@@ -4,14 +4,7 @@ const Shop = mongoose.model('Shops');
 const Seller = mongoose.model('Sellers');
 
 exports.addShopDetails = (req, res) => {
-  const {
-    shopOwnerId,
-    shopName,
-    category,
-    address,
-    city,
-    pincode,
-  } = req.body;
+  const { shopOwnerId, shopName, category, address, city, pincode } = req.body;
 
   const newShop = {
     shopOwnerId,
@@ -20,6 +13,7 @@ exports.addShopDetails = (req, res) => {
     address,
     city,
     pincode,
+    verified: false,
   };
 
   const shop = new Shop(newShop);
@@ -93,6 +87,18 @@ exports.addShopCoordinates = (req, res) => {
     });
 };
 
+exports.markShopVerified = async (req, res) => {
+  try {
+    await Shop.findOneAndUpdate(
+      { _id: req.params.shopId },
+      { $set: { verified: true } }
+    );
+    return res.status(200).send({ message: 'Shop Verified!' });
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
 exports.getShopDetails = (req, res) => {
   Shop.findOne({
     _id: req.params.shopId,
@@ -151,7 +157,7 @@ exports.deleteInventoryProduct = async (req, res) => {
 exports.getShopInventory = async (req, res) => {
   try {
     const doc = await Shop.find({ _id: req.params.shopId }).sort({
-      createdAt: 1,
+      createdAt: -1,
     });
     if (doc) {
       return res.status(200).send(doc[0].inventory);

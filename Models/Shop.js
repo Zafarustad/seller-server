@@ -38,6 +38,10 @@ const ShopSchema = new mongoose.Schema(
     shopCoordinate: {
       type: Object,
     },
+    verified: {
+      type: Boolean,
+      required: true
+    }
     // shopMenuImage: {
     // type: String,
     // },

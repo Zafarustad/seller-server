@@ -59,7 +59,7 @@ exports.getCompletedShopOrders = (req, res) => {
 exports.markOrderComplete = (req, res) => {
   Order.findOneAndUpdate(
     { _id: req.params.orderId },
-    { $set: { completed: true } },
+    { $set: { active: false } },
     { returnOriginal: false }
   )
     .then((doc) => {
