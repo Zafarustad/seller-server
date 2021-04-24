@@ -26,6 +26,9 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    paid: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

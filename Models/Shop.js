@@ -40,8 +40,11 @@ const ShopSchema = new mongoose.Schema(
     },
     verified: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
+    upiId: {
+      type: String,
+    },
     // shopMenuImage: {
     // type: String,
     // },

@@ -12,13 +12,15 @@ const {
   getShopDetails,
   addToInventory,
   deleteInventoryProduct,
-  getShopInventory
+  getShopInventory,
+  markShopVerified
 } = require('./Routes/ShopRoutes');
 const {
   addNewOrder,
   getCompletedShopOrders,
   getPendingShopOrders,
   markOrderComplete,
+  markOrderCancelled
 } = require('./Routes/OrderRoutes');
 const { authToken } = require('./utils/AuthToken');
 
@@ -64,6 +66,7 @@ app.post('/seller/shop/coordinate', authToken, addShopCoordinates);
 app.get('/seller/shop/:shopId', authToken, getShopDetails);
 app.post('/seller/shop/product', authToken, addToInventory);
 app.get('/seller/inventory/:shopId', authToken, getShopInventory)
+app.put('/seller/verify/:shopId', authToken, markShopVerified);
 app.delete(
   '/seller/shop/:shopId/product/:productId',
   authToken,
@@ -75,6 +78,7 @@ app.post('/seller/order', authToken, addNewOrder);
 app.get('/seller/order/pending/:shopId', authToken, getPendingShopOrders);
 app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/:orderId', authToken, markOrderComplete);
+app.put('/seller/order/cancelled', authToken, markOrderCancelled);
 
 app.listen(port, () => {
   console.log(`server is listening to port: ${port}`);

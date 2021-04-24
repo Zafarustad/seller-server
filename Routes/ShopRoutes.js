@@ -4,7 +4,7 @@ const Shop = mongoose.model('Shops');
 const Seller = mongoose.model('Sellers');
 
 exports.addShopDetails = (req, res) => {
-  const { shopOwnerId, shopName, category, address, city, pincode } = req.body;
+  const { shopOwnerId, shopName, category, address, city, pincode, upiId } = req.body;
 
   const newShop = {
     shopOwnerId,
@@ -12,6 +12,7 @@ exports.addShopDetails = (req, res) => {
     category,
     address,
     city,
+    upiId,
     pincode,
     verified: false,
   };
