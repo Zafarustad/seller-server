@@ -26,7 +26,7 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    paid: {
+    upiPaid: {
       type: Boolean,
     },
   },

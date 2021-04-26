@@ -4,7 +4,15 @@ const Shop = mongoose.model('Shops');
 const Seller = mongoose.model('Sellers');
 
 exports.addShopDetails = (req, res) => {
-  const { shopOwnerId, shopName, category, address, city, pincode, upiId } = req.body;
+  const {
+    shopOwnerId,
+    shopName,
+    category,
+    address,
+    city,
+    pincode,
+    upiId,
+  } = req.body;
 
   const newShop = {
     shopOwnerId,
@@ -164,6 +172,47 @@ exports.getShopInventory = async (req, res) => {
       return res.status(200).send(doc[0].inventory);
     }
   } catch (err) {
-    res.status(500).send({ error: `internal server error: ${err}` });
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
+exports.updateShopDetails = async (req, res) => {
+  try {
+    const {
+      shopId,
+      shopName,
+      category,
+      address,
+      city,
+      pincode,
+      upiId,
+    } = req.body;
+    const doc = await Shop.findOneAndUpdate(
+      { _id: mongoose.Types.ObjectId(shopId) },
+      { $set: { shopName, category, address, city, pincode, upiId } },
+      { returnOriginal: false, projection: { __v: 0 } }
+    );
+    if (!doc) {
+      return res.status(404).send({ message: 'Shop Not Found!' });
+    }
+    return res.status(200).send(doc);
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
+exports.updateShopImage = async (req, res) => {
+  try {
+    const doc = await Shop.findOneAndUpdate(
+      { _id: mongoose.Types.ObjectId(req.body.shopId) },
+      { $set: { shopImage: req.body.shopImage } },
+      { returnOriginal: false, projection: { __v: 0 } }
+    );
+    if (!doc) {
+      return res.status(404).send({ message: 'Shop Not Found!' });
+    }
+    return res.status(200).send(doc);
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
   }
 };

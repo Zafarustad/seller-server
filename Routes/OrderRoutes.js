@@ -16,7 +16,7 @@ exports.addNewOrder = (req, res) => {
     shopId,
     active: true,
     cancelled: false,
-    paid: false,
+    upiPaid: false,
   };
 
   const order = new Order(newOrder);

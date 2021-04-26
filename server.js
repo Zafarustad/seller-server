@@ -13,14 +13,16 @@ const {
   addToInventory,
   deleteInventoryProduct,
   getShopInventory,
-  markShopVerified
+  markShopVerified,
+  updateShopDetails,
+  updateShopImage,
 } = require('./Routes/ShopRoutes');
 const {
   addNewOrder,
   getCompletedShopOrders,
   getPendingShopOrders,
   markOrderComplete,
-  markOrderCancelled
+  markOrderCancelled,
 } = require('./Routes/OrderRoutes');
 const { authToken } = require('./utils/AuthToken');
 
@@ -65,8 +67,10 @@ app.post('/seller/shop', authToken, addShopDetails);
 app.post('/seller/shop/coordinate', authToken, addShopCoordinates);
 app.get('/seller/shop/:shopId', authToken, getShopDetails);
 app.post('/seller/shop/product', authToken, addToInventory);
-app.get('/seller/inventory/:shopId', authToken, getShopInventory)
+app.get('/seller/inventory/:shopId', authToken, getShopInventory);
 app.put('/seller/verify/:shopId', authToken, markShopVerified);
+app.put('/seller/shop', authToken, updateShopDetails);
+app.put('/seller/shopImage', authToken, updateShopImage);
 app.delete(
   '/seller/shop/:shopId/product/:productId',
   authToken,

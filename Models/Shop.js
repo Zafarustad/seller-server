@@ -45,11 +45,11 @@ const ShopSchema = new mongoose.Schema(
     upiId: {
       type: String,
     },
+    shopImage: {
+    type: String,
+    },
     // shopMenuImage: {
-    // type: String,
-    // },
-    // shopImage: {
-    // type: String,
+    //   type: String,
     // },
   },
   {
