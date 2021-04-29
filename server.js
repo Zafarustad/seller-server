@@ -81,8 +81,8 @@ app.delete(
 app.post('/seller/order', authToken, addNewOrder);
 app.get('/seller/order/pending/:shopId', authToken, getPendingShopOrders);
 app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
-app.put('/seller/order/:orderId', authToken, markOrderComplete);
-app.put('/seller/order/cancelled', authToken, markOrderCancelled);
+app.put('/seller/order/complete/:orderId', authToken, markOrderComplete);
+app.put('/seller/order/cancelled/:orderId', authToken, markOrderCancelled);
 
 app.listen(port, () => {
   console.log(`server is listening to port: ${port}`);
