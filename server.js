@@ -16,6 +16,7 @@ const {
   markShopVerified,
   updateShopDetails,
   updateShopImage,
+  changeProductAvailability,
 } = require('./Routes/ShopRoutes');
 const {
   addNewOrder,
@@ -71,6 +72,11 @@ app.get('/seller/inventory/:shopId', authToken, getShopInventory);
 app.put('/seller/verify/:shopId', authToken, markShopVerified);
 app.put('/seller/shop', authToken, updateShopDetails);
 app.put('/seller/shopImage', authToken, updateShopImage);
+app.put(
+  '/seller/inventory/availability',
+  authToken,
+  changeProductAvailability
+);
 app.delete(
   '/seller/shop/:shopId/product/:productId',
   authToken,

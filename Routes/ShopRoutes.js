@@ -216,3 +216,27 @@ exports.updateShopImage = async (req, res) => {
     return res.status(500).send({ error: `internal server error: ${err}` });
   }
 };
+
+exports.changeProductAvailability = async (req, res) => {
+  try {
+    const doc = await Shop.update(
+      {
+        _id: mongoose.Types.ObjectId(req.body.shopId),
+      },
+      { $set: { 'inventory.$[element].inStock': !req.body.value } },
+      {
+        arrayFilters: [
+          {
+            'element._id': { $eq: mongoose.Types.ObjectId(req.body.productId) },
+          },
+        ],
+      }
+    );
+    if (!doc) {
+      return res.status(404).send({ message: 'Product Not Found!' });
+    }
+    return res.status(200).send({ status: 'OK' });
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
