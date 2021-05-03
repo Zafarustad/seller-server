@@ -23,7 +23,6 @@ exports.signup = (req, res) => {
     .save()
     .then(() => {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY);
-      // return res.status(200).send({ token });
       finalDoc.token = token;
     })
     .then(() => {
@@ -41,11 +40,17 @@ exports.signup = (req, res) => {
           return res.status(200).send(finalDoc);
         })
         .catch((err) => {
-          res.status(500).send({ error: `Internal server error: ${err}` });
+          return res
+            .status(500)
+            .send({ error: `Internal server error: ${err}` });
         });
     })
     .catch((err) => {
-      return res.status(500).send({ error: `Internal server error: ${err}` });
+      if (err.code === 11000) {
+        return res.status(400).send({ error: 'Account already exists!' });
+      } else {
+        return res.status(500).send({ error: `Internal server error: ${err}` });
+      }
     });
 };
 
@@ -116,7 +121,7 @@ exports.getAuthenticatedUser = (req, res) => {
       if (!doc) {
         return res.status(400).send({ general: 'Seller not found' });
       }
-       return res.status(200).send(doc);
+      return res.status(200).send(doc);
     })
     .catch((err) => {
       res.status(500).send({ error: `internal server error: ${err}` });
