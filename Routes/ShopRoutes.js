@@ -1,9 +1,7 @@
-const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
-const { shopDetailsValidator } = require('../utils/validators');
 
 const Shop = mongoose.model('Shops');
-const User = mongoose.model('Users');
+const Seller = mongoose.model('Sellers');
 
 exports.addShopDetails = (req, res) => {
   const {
@@ -13,7 +11,7 @@ exports.addShopDetails = (req, res) => {
     address,
     city,
     pincode,
-    gstin,
+    upiId,
   } = req.body;
 
   const newShop = {
@@ -22,21 +20,17 @@ exports.addShopDetails = (req, res) => {
     category,
     address,
     city,
+    upiId,
     pincode,
-    gstin,
+    verified: false,
   };
-
-  const { valid, errors } = shopDetailsValidator(newShop);
-  if (!valid) {
-    return res.status(400).send(errors);
-  }
 
   const shop = new Shop(newShop);
 
   shop
     .save()
     .then((shopDoc) => {
-      User.findOneAndUpdate(
+      Seller.findOneAndUpdate(
         { _id: shopOwnerId },
         { $set: { detailsCompleted: 1 } },
         { returnOriginal: false, projection: { password: 0, __v: 0 } }
@@ -75,7 +69,7 @@ exports.addShopCoordinates = (req, res) => {
     { returnOriginal: false, projection: { __v: 0 } }
   )
     .then((shopDoc) => {
-      User.findOneAndUpdate(
+      Seller.findOneAndUpdate(
         { _id: shopOwnerId },
         { $set: { detailsCompleted: 2 } },
         { returnOriginal: false, projection: { password: 0, __v: 0 } }
@@ -100,6 +94,18 @@ exports.addShopCoordinates = (req, res) => {
     .catch((err) => {
       return res.status(500).send({ error: `Internal server error: ${err}` });
     });
+};
+
+exports.markShopVerified = async (req, res) => {
+  try {
+    await Shop.findOneAndUpdate(
+      { _id: req.params.shopId },
+      { $set: { verified: true } }
+    );
+    return res.status(200).send({ message: 'Shop Verified!' });
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
 };
 
 exports.getShopDetails = (req, res) => {
@@ -160,12 +166,77 @@ exports.deleteInventoryProduct = async (req, res) => {
 exports.getShopInventory = async (req, res) => {
   try {
     const doc = await Shop.find({ _id: req.params.shopId }).sort({
-      createdAt: 1,
+      createdAt: -1,
     });
     if (doc) {
       return res.status(200).send(doc[0].inventory);
     }
   } catch (err) {
-    res.status(500).send({ error: `internal server error: ${err}` });
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
+exports.updateShopDetails = async (req, res) => {
+  try {
+    const {
+      shopId,
+      shopName,
+      category,
+      address,
+      city,
+      pincode,
+      upiId,
+    } = req.body;
+    const doc = await Shop.findOneAndUpdate(
+      { _id: mongoose.Types.ObjectId(shopId) },
+      { $set: { shopName, category, address, city, pincode, upiId } },
+      { returnOriginal: false, projection: { __v: 0 } }
+    );
+    if (!doc) {
+      return res.status(404).send({ message: 'Shop Not Found!' });
+    }
+    return res.status(200).send(doc);
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
+exports.updateShopImage = async (req, res) => {
+  try {
+    const doc = await Shop.findOneAndUpdate(
+      { _id: mongoose.Types.ObjectId(req.body.shopId) },
+      { $set: { shopImage: req.body.shopImage } },
+      { returnOriginal: false, projection: { __v: 0 } }
+    );
+    if (!doc) {
+      return res.status(404).send({ message: 'Shop Not Found!' });
+    }
+    return res.status(200).send(doc);
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
+  }
+};
+
+exports.changeProductAvailability = async (req, res) => {
+  try {
+    const doc = await Shop.update(
+      {
+        _id: mongoose.Types.ObjectId(req.body.shopId),
+      },
+      { $set: { 'inventory.$[element].inStock': !req.body.value } },
+      {
+        arrayFilters: [
+          {
+            'element._id': { $eq: mongoose.Types.ObjectId(req.body.productId) },
+          },
+        ],
+      }
+    );
+    if (!doc) {
+      return res.status(404).send({ message: 'Product Not Found!' });
+    }
+    return res.status(200).send({ status: 'OK' });
+  } catch (err) {
+    return res.status(500).send({ error: `internal server error: ${err}` });
   }
 };
