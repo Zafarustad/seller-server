@@ -90,6 +90,4 @@ app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/complete/:orderId', authToken, markOrderComplete);
 app.put('/seller/order/cancelled/:orderId', authToken, markOrderCancelled);
 
-app.listen(port, () => {
-  console.log(`server is listening to port: ${port}`);
-});
+module.exports = app;
