@@ -124,13 +124,12 @@ exports.getShopDetails = (req, res) => {
 };
 
 exports.addToInventory = (req, res) => {
-  const { productName, stockQuantity, price, shopId } = req.body;
+  const { productName, stockQuantity, price, shopId, inStock } = req.body;
   const data = {
     productName,
-    stockQuantity,
     price,
     _id: new mongoose.Types.ObjectId(),
-    inStock: true,
+    inStock: inStock,
     createdAt: new Date(),
   };
 
