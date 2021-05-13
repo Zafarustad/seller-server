@@ -1,11 +1,16 @@
-require('./Models/Seller');
-require('./Models/Shop');
-require('./Models/Order');
+require('./Seller/Models/Seller');
+require('./Seller/Models/Shop');
+require('./Seller/Models/Order');
+require('./Admin/Model/Admin');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const { signup, login, getAuthenticatedUser } = require('./Routes/AuthRoutes');
+const {
+  signup,
+  login,
+  getAuthenticatedUser,
+} = require('./Seller/Routes/AuthRoutes');
 const {
   addShopDetails,
   addShopCoordinates,
@@ -17,14 +22,19 @@ const {
   updateShopDetails,
   updateShopImage,
   changeProductAvailability,
-} = require('./Routes/ShopRoutes');
+} = require('./Seller/Routes/ShopRoutes');
 const {
   addNewOrder,
   getCompletedShopOrders,
   getPendingShopOrders,
   markOrderComplete,
   markOrderCancelled,
-} = require('./Routes/OrderRoutes');
+} = require('./Seller/Routes/OrderRoutes');
+const { adminLogin, adminSignup } = require('./Admin/Routes/AdminAuthRoutes');
+const {
+  getAllShops,
+  getShopOwnerData,
+} = require('./Admin/Routes/AdminShopRoutes');
 const { authToken } = require('./utils/AuthToken');
 
 const app = express();
@@ -61,12 +71,18 @@ app.get('/aws-test', (req, res) => {
   res.status(200).send('aws-test hello-world');
 });
 
+//Admin auth endpoints
+app.post('/admin/signup', adminSignup);
+app.post('/admin/login', adminLogin);
+app.get('/admin/shops', authToken, getAllShops);
+app.get('/admin/seller/:sellerId', authToken, getShopOwnerData);
+
 //seller auth endpoints
 app.post('/seller/signup', signup);
 app.post('/seller/login', login);
 app.get('/seller/user/:id', authToken, getAuthenticatedUser);
 
-//Shop endpoints
+//Seller Shop endpoints
 app.post('/seller/shop', authToken, addShopDetails);
 app.post('/seller/shop/coordinate', authToken, addShopCoordinates);
 app.get('/seller/shop/:shopId', authToken, getShopDetails);
@@ -82,11 +98,13 @@ app.delete(
   deleteInventoryProduct
 );
 
-//Order endpoints
+//Seller Order endpoints
 app.post('/seller/order', authToken, addNewOrder);
 app.get('/seller/order/pending/:shopId', authToken, getPendingShopOrders);
 app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/complete/:orderId', authToken, markOrderComplete);
 app.put('/seller/order/cancelled/:orderId', authToken, markOrderCancelled);
 
-module.exports = app;
+app.listen(port, () => {
+  console.log(`server is listening to port: ${port}`);
+});

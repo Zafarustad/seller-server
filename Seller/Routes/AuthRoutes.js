@@ -22,7 +22,9 @@ exports.signup = (req, res) => {
   user
     .save()
     .then(() => {
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY);
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
+        expiresIn: '30d',
+      });
       finalDoc.token = token;
     })
     .then(() => {
@@ -57,7 +59,6 @@ exports.signup = (req, res) => {
 //login api
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  const credentials = { email, password };
 
   const user = await Seller.findOne({ email });
   if (!user) {
@@ -70,7 +71,9 @@ exports.login = async (req, res) => {
       if (!result) {
         return res.status(400).send({ general: 'Wrong email or password' });
       }
-      let token = jwt.sign({ userId: user._id }, process.env.JWT_KEY);
+      let token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
+        expiresIn: '30d',
+      });
       finalDoc.token = token;
     })
     .then(() => {
