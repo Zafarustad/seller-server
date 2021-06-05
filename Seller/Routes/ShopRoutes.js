@@ -96,18 +96,6 @@ exports.addShopCoordinates = (req, res) => {
     });
 };
 
-exports.markShopVerified = async (req, res) => {
-  try {
-    await Shop.findOneAndUpdate(
-      { _id: req.params.shopId },
-      { $set: { verified: true } }
-    );
-    return res.status(200).send({ message: 'Shop Verified!' });
-  } catch (err) {
-    return res.status(500).send({ error: `internal server error: ${err}` });
-  }
-};
-
 exports.getShopDetails = (req, res) => {
   Shop.findOne({
     _id: req.params.shopId,

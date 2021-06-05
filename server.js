@@ -18,7 +18,6 @@ const {
   addToInventory,
   deleteInventoryProduct,
   getShopInventory,
-  markShopVerified,
   updateShopDetails,
   updateShopImage,
   changeProductAvailability,
@@ -34,6 +33,8 @@ const { adminLogin, adminSignup } = require('./Admin/Routes/AdminAuthRoutes');
 const {
   getAllShops,
   getShopOwnerData,
+  markShopVerified,
+  markShopUnverified,
 } = require('./Admin/Routes/AdminShopRoutes');
 const { authToken } = require('./utils/AuthToken');
 
@@ -67,15 +68,13 @@ connection.on('error', (err) => {
   console.log(`MongoDB error: ${err}`);
 });
 
-app.get('/aws-test', (req, res) => {
-  res.status(200).send('aws-test hello-world');
-});
-
 //Admin auth endpoints
 app.post('/admin/signup', adminSignup);
 app.post('/admin/login', adminLogin);
 app.get('/admin/shops', authToken, getAllShops);
 app.get('/admin/seller/:sellerId', authToken, getShopOwnerData);
+app.put('/admin/verify/:shopId', authToken, markShopVerified);
+app.put('/admin/unverify/:shopId', authToken, markShopUnverified);
 
 //seller auth endpoints
 app.post('/seller/signup', signup);
@@ -88,7 +87,6 @@ app.post('/seller/shop/coordinate', authToken, addShopCoordinates);
 app.get('/seller/shop/:shopId', authToken, getShopDetails);
 app.post('/seller/shop/product', authToken, addToInventory);
 app.get('/seller/inventory/:shopId', authToken, getShopInventory);
-app.put('/seller/verify/:shopId', authToken, markShopVerified);
 app.put('/seller/shop', authToken, updateShopDetails);
 app.put('/seller/shopImage', authToken, updateShopImage);
 app.put('/seller/inventory/availability', authToken, changeProductAvailability);
@@ -105,6 +103,4 @@ app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/complete/:orderId', authToken, markOrderComplete);
 app.put('/seller/order/cancelled/:orderId', authToken, markOrderCancelled);
 
-app.listen(port, () => {
-  console.log(`server is listening to port: ${port}`);
-});
+module.exports = app
