@@ -47,7 +47,7 @@ app.use(
   express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 })
 );
 
-const uri = process.env.ATLAS_URI;
+const uri = process.env.PROD_ATLAS_URI;
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -103,4 +103,8 @@ app.get('/seller/order/completed/:shopId', authToken, getCompletedShopOrders);
 app.put('/seller/order/complete/:orderId', authToken, markOrderComplete);
 app.put('/seller/order/cancelled/:orderId', authToken, markOrderCancelled);
 
-module.exports = app
+// module.exports = app;
+
+app.listen(port, () => {
+  console.log(`server is listening to port ${port}`);
+});
